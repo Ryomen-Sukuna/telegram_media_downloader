@@ -11,6 +11,4 @@ class LogFilter(logging.Filter):
 
     # pylint: disable = W0221
     def filter(self, record):
-        if record.funcName in ("send", "get_file"):
-            return False
-        return True
+        return record.funcName not in ("send", "get_file")
