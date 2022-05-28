@@ -17,9 +17,8 @@ class FileManagementTestCase(unittest.TestCase):
         self.test_file = os.path.join(self.this_dir, "file-test.txt")
         self.test_file_copy_1 = os.path.join(self.this_dir, "file-test-copy1.txt")
         self.test_file_copy_2 = os.path.join(self.this_dir, "file-test-copy2.txt")
-        f = open(self.test_file, "w+")
-        f.write("dummy file")
-        f.close()
+        with open(self.test_file, "w+") as f:
+            f.write("dummy file")
         Path(self.test_file_copy_1).touch()
         Path(self.test_file_copy_2).touch()
 

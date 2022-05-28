@@ -69,9 +69,9 @@ def _can_download(
     bool
         True if the file format can be downloaded else False.
     """
-    if _type in ["audio", "document", "video"]:
+    if _type in {"audio", "document", "video"}:
         allowed_formats: list = file_formats[_type]
-        if not file_format in allowed_formats and allowed_formats[0] != "all":
+        if file_format not in allowed_formats and allowed_formats[0] != "all":
             return False
     return True
 
@@ -111,24 +111,21 @@ async def _get_media_meta(
     Tuple[str, Optional[str]]
         file_name, file_format
     """
-    if _type in ["audio", "document", "video"]:
+    if _type in {"audio", "document", "video"}:
         # pylint: disable = C0301
         file_format: Optional[str] = media_obj.mime_type.split("/")[-1]  # type: ignore
     else:
         file_format = None
 
-    if _type in ["voice", "video_note"]:
+    if _type in {"voice", "video_note"}:
         # pylint: disable = C0209
         file_format = media_obj.mime_type.split("/")[-1]  # type: ignore
         file_name: str = os.path.join(
             THIS_DIR,
             _type,
-            "{}_{}.{}".format(
-                _type,
-                dt.utcfromtimestamp(media_obj.date).isoformat(),  # type: ignore
-                file_format,
-            ),
+            f"{_type}_{dt.utcfromtimestamp(media_obj.date).isoformat()}.{file_format}",
         )
+
     else:
         file_name = os.path.join(
             THIS_DIR, _type, getattr(media_obj, "file_name", None) or ""
@@ -281,8 +278,7 @@ async def process_messages(
         ]
     )
 
-    last_message_id = max(message_ids)
-    return last_message_id
+    return max(message_ids)
 
 
 async def begin_import(config: dict, pagination_limit: int) -> dict:
